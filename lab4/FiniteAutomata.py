@@ -1,3 +1,4 @@
+
 class FiniteAutomata:
     def __init__(self, fileName):
         self.__states = []
@@ -6,8 +7,7 @@ class FiniteAutomata:
         self.__initialState = None
         self.__finalStates = []
         self.readFA_FromFile(fileName) 
-        self.__isDFA = True
-     
+        
          
     def parseLine(self,line):
         return line.strip().split(" ")     
@@ -27,9 +27,8 @@ class FiniteAutomata:
                 currentTransition = self.parseLine(transition)
                 if (currentTransition[0], currentTransition[1]) in self.__transitions.keys():
                     self.__transitions[(currentTransition[0], currentTransition[1])].append(currentTransition[2])
-                    self.__isDFA = False
                 else:    
-                    self.__transitions[(currentTransition[0], currentTransition[1])]=currentTransition[2]
+                    self.__transitions[(currentTransition[0], currentTransition[1])] = [currentTransition[2]]
                 
             initialState = file.readline()
             self.__initialState = initialState.strip()
@@ -67,18 +66,21 @@ class FiniteAutomata:
         print("    0. Exit")
         print("\n")
         
-    def verifySequence(self, dfa): #aab accepted, aba not accepted
-        if not self.__isDFA:
-            print("Not DFA")
-            return
+    def checkDFA(self):
+        for transition in self.__transitions:
+            if len(self.__transitions.get(transition)) > 1:
+                return False
+             
+        return True
         
+    def verifySequence(self, dfa): #aab accepted, aba not accepted
         currentState = self.__initialState
         while len(dfa) > 0 and currentState is not None:
             transition = (currentState, dfa[0])
-            #print(transition)
+            print(transition)
             if transition in self.__transitions.keys():
-                currentState = self.__transitions[transition]
-                #print(currentState)
+                currentState = self.__transitions[transition][0]
+                print(currentState)
                 dfa = dfa[1:]
             else:
                 return False
@@ -102,12 +104,16 @@ def run():
         elif option == 5:
             FA.displayFinalStates()  
         elif option == 6:
-            sequence = input("Enter sequence here: ")    
-            result = FA.verifySequence(sequence)
-            if result:
-                print("Sequence accepted!")
-            else:
-                print("Sequence NOT accepted")    
+            dfa = FA.checkDFA()
+            if dfa == False:
+                print("Not DFA")
+            else:    
+                sequence = input("Enter sequence here: ")    
+                result = FA.verifySequence(sequence)
+                if result:
+                    print("Sequence accepted!")
+                else:
+                    print("Sequence NOT accepted")    
         elif option == 0: 
             return    
         else:
