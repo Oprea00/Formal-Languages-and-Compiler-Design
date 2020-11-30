@@ -1,0 +1,11 @@
+S A B C D
+S
+ a+*()
+S BA
+A +BA
+A epsilon
+B DC
+C *DC
+C epsilon
+D (S)
+D a
