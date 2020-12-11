@@ -368,6 +368,9 @@ bool checkSequence(string s)
 
 void printTree(string s, int father, int sibling)
 {
+    const char separator = ' ';
+    const int width = 10;
+
     nodeCounter++;
 
     int currentCount = nodeCounter;
@@ -377,9 +380,22 @@ void printTree(string s, int father, int sibling)
 
     if (true)
     {
-        if (s == " ")
-            cout << nodeCounter << " epsilon " << father << " " << sibling << "\n";
-        else  cout << nodeCounter << " " << s << " " << father << " " << sibling << "\n";
+        if (s == " "){
+            cout << left << setw(width) << setfill(separator) << nodeCounter;
+            cout << left << setw(width) << setfill(separator) << "epsilon";
+            cout << left << setw(width) << setfill(separator) << father;
+            cout << left << setw(width) << setfill(separator) << sibling;
+            cout << endl;
+        }                   
+            //cout << nodeCounter << " epsilon " << father << " " << sibling << "\n";
+        else {
+            cout << left << setw(width) << setfill(separator) << nodeCounter;
+            cout << left << setw(width) << setfill(separator) << s;
+            cout << left << setw(width) << setfill(separator) << father;
+            cout << left << setw(width) << setfill(separator) << sibling;
+            cout << endl;
+        }                    
+            //cout << nodeCounter << " " << s << " " << father << " " << sibling << "\n";
 
         if (s == string(1, inputStack[0]))
         {
@@ -410,6 +426,69 @@ void printTree(string s, int father, int sibling)
 
 
 }
+
+
+void printParseTable(){
+    const char separator = ' ';
+    const int width = 10;
+
+    cout << left << setw(width) << setfill(separator) << " ";
+    for (auto i : alphabet) {
+        if (i == ' ')
+            cout << left << setw(width) << setfill(separator) << "$";
+        else
+            cout << left << setw(width) << setfill(separator) << i;
+    }
+    cout << endl;
+    cout << "------------------------------------------------------------------";
+    cout << endl;
+    for (auto nonTerminal : NonTerminals) {
+        cout << left << setw(width) << setfill(separator) << "  " + nonTerminal + "   |";
+
+        for (int i = 0; i < alphabet[i]; ++i)
+        {
+            bool written = false;
+            for (auto pairs : parseTable[nonTerminal][string(1, alphabet[i])]) {
+                cout << left << setw(width) << setfill(separator) << "(" + pairs.first + "," + to_string(pairs.second) + ")";
+                written = true;
+            }
+            if (written == false)
+                cout << left << setw(width) << setfill(separator) << " ";
+        }
+
+        cout << endl;
+        cout << "------------------------------------------------------------------";
+        cout << endl;
+    }
+    for (int i = 0; i < alphabet.size(); ++i) {
+        if (alphabet[i] == ' ') {
+            cout << left << setw(width) << setfill(separator) << "$";
+        }
+        else
+            cout << left << setw(width) << setfill(separator) << alphabet[i];
+        for (int j = 0; j < alphabet.size(); ++j) {
+            if (i == 0) {
+                if (j == 0)
+                    cout << left << setw(width) << setfill(separator) << "acc";
+                else
+                    cout << left << setw(width) << setfill(separator) << " ";
+            }
+            else {
+                if (j == i) {
+                    cout << left << setw(width) << setfill(separator) << "pop";
+                }
+                else
+                    cout << left << setw(width) << setfill(separator) << " ";
+            }
+        }
+        cout << endl;
+        cout << "------------------------------------------------------------------";
+        cout << endl;
+    }
+
+    cout << endl;
+}
+
 
 int main()
 {
@@ -537,6 +616,9 @@ int main()
         }
     }
 
+    //print parse table in table format
+    printParseTable();
+
     if (isLL1)
     {
         cout << " Grammar is LL1\n";
@@ -546,7 +628,7 @@ int main()
 
         inputStack = sequence;
         cout << " -- Parse tree of sequence ( father/sibling table ) --\n";
-        cout << " counter / node / father / sibling\n";
+        cout << "counter  /  node  /  father  /  sibling\n";
         /// father / sibling table
         printTree(startingNonTerminal, -1, -1);
 
