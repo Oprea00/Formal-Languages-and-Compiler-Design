@@ -1,0 +1,4 @@
+flex specification.lxi
+bison -d spec.y
+gcc lex.yy.c spec.tab.h -o result_yacc 
+result_yacc < p1.txt

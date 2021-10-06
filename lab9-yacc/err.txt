@@ -1,0 +1,14 @@
+function min
+beginn
+int a
+read(a)
+if a < b 
+min1 = a
+else
+min1 = b
+if min1 < c then
+min2 = min1
+else
+min2 = c
+write(min2)
+end

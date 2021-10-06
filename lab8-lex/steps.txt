@@ -1,0 +1,9 @@
+Launching the execution for lab8:
+
+-flex specification.lxi
+-gcc lex.yy.c -o my_lex
+-my_lex < p1.txt
+
+
+
+https://stackoverflow.com/questions/5456011/how-to-compile-lex-yacc-files-on-windows

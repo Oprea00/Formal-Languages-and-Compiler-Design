@@ -1,0 +1,13 @@
+begin
+	int n
+	read(n)
+	int count = 0
+	int i
+	for i = 2 to n do
+		if n % i == 0 then
+			count = count + 1
+	if count == 0 then
+		return true
+	else
+		return false
+end 

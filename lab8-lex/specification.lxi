@@ -1,0 +1,81 @@
+%{ 	 
+#include <stdio.h>
+#include <string.h>
+int lines = 1;
+%} 
+
+%option noyywrap
+%option caseless
+
+DIGIT 		[0-9]
+NUMBER		[+-]?[1-9][0-9]*|0
+WORD		\"[0-9A-Za-z ]*\"
+CHARACTER   \'[0-9A-Za-z ]\'
+CONST		{NUMBER}|{CHARACTER}|{WORD}
+IDENTIFIER  [a-zA-z][a-zA-z0-9]{0,7}
+
+%%
+
+begin	{printf("Reserved word: %s\n", yytext);}
+char	{printf("Reserved word: %s\n", yytext);}
+do		{printf("Reserved word: %s\n", yytext);}
+else	{printf("Reserved word: %s\n", yytext);}
+end 	{printf("Reserved word: %s\n", yytext);}
+for		{printf("Reserved word: %s\n", yytext);}
+function {printf("Reserved word: %s\n", yytext);}
+if		{printf("Reserved word: %s\n", yytext);}
+int		{printf("Reserved word: %s\n", yytext);}
+read	{printf("Reserved word: %s\n", yytext);}
+return	{printf("Reserved word: %s\n", yytext);}
+string 	{printf("Reserved word: %s\n", yytext);}
+then	{printf("Reserved word: %s\n", yytext);}
+vector	{printf("Reserved word: %s\n", yytext);}
+while	{printf("Reserved word: %s\n", yytext);}
+write	{printf("Reserved word: %s\n", yytext);}
+
+{CONST}		{printf("Constant: %s\n", yytext);}
+
+{IDENTIFIER}	{printf("Identifier: %s\n", yytext);}
+
+"("		{printf( "Separator: %s\n", yytext );}
+")"		{printf( "Separator: %s\n", yytext );}
+"["		{printf( "Separator: %s\n", yytext );}
+"]"		{printf( "Separator: %s\n", yytext );}
+"{"		{printf( "Separator: %s\n", yytext );}
+"}"		{printf( "Separator: %s\n", yytext );}
+
+"+"		{printf( "Operator: %s\n", yytext );}
+"-"		{printf( "Operator: %s\n", yytext );}
+"*"		{printf( "Operator: %s\n", yytext );}
+"/"		{printf( "Operator: %s\n", yytext );}
+"%"		{printf( "Operator: %s\n", yytext );}
+"="		{printf( "Operator: %s\n", yytext );}
+"=="	{printf( "Operator: %s\n", yytext );}
+"<>"	{printf( "Operator: %s\n", yytext );}
+"<"		{printf( "Operator: %s\n", yytext );}
+">"		{printf( "Operator: %s\n", yytext );}
+"<="	{printf( "Operator: %s\n", yytext );}
+">="	{printf( "Operator: %s\n", yytext );}
+
+
+[ \t]+  	{}  /* remove spaces */
+
+[\n]+ {lines++;}  /* increase line number for printing error */
+
+[0-9~@#$%^][a-zA-Z0-9]{0,7}	{printf("Illegal identifier %s at line %d\n", yytext, lines);}
+
+
+%%
+
+main( argc, argv ) 
+int argc; 
+char **argv; 
+{ 
+    ++argv, --argc; /* skip over program name */ 
+    if ( argc > 0 ) 
+	yyin = fopen( argv[0], "r" ); 
+    else 
+	yyin = stdin; 
+    yylex(); 
+} 
+

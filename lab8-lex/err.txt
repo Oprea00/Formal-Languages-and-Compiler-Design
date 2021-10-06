@@ -1,0 +1,17 @@
+begin
+int a
+read(a)
+int b
+read(b)
+int c
+read(c)
+if a $ b then
+1min = a
+else
+1min = b
+if 1min < c then
+min2 = 1min
+else
+min2 = c
+return min2
+end
